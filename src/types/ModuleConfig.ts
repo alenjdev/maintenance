@@ -1,12 +1,5 @@
 import { MaintenanceStats } from "./MaintenanceStats";
 
-export type maintenanceType =
-  | "Blade sharpening"
-  | "Oil change"
-  | "Oil filter change"
-  | "Air filter"
-  | "Cleaning / Powerwash";
-
 export const moduleConfig: MaintenanceStats = {
   "Blade sharpening": {
     streamName: "blade.sharpening",

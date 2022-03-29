@@ -36,16 +36,14 @@ export const Maintenance: FC<IMaintenanceProps> = ({ device }) => {
       {!!latestStats &&
         Object.keys(moduleConfig).map((_: string, idx: number) => {
           if (streams?.length > 0) {
-            const currentStat = streams!.indexOf(
-              (moduleConfig as any)[_].streamName
-            );
+            const currentStat = streams!.indexOf(moduleConfig[_].streamName);
             if (currentStat >= 0) {
               const lastService = new Date(
                 (latestStats as any)[currentStat].currentValueTime
               );
               const nextService = getNextServiceDate(
                 lastService,
-                (moduleConfig as any)[_].window
+                moduleConfig[_].window
               );
               return (
                 <MaintenanceItem
@@ -54,6 +52,7 @@ export const Maintenance: FC<IMaintenanceProps> = ({ device }) => {
                   lastServiceDate={getLastServiceDate(lastService) || "--:--"}
                   nextServiceDate={nextService[0] || "--:--"}
                   serviceStatus={nextService[1]}
+                  maintenanceType={(moduleConfig as any)[_].streamName}
                 />
               );
             }
@@ -65,6 +64,7 @@ export const Maintenance: FC<IMaintenanceProps> = ({ device }) => {
               lastServiceDate={"Last service: More than 20 days ago"}
               nextServiceDate={"Next Service: Overdue for more than 15 days"}
               serviceStatus={"overdue"}
+              maintenanceType={(moduleConfig as any)[_].streamName}
             />
           );
         })}

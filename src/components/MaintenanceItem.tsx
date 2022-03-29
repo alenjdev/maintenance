@@ -1,11 +1,13 @@
 import styles from "./MaintenanceItem.module.scss";
 import { FC } from "react";
+import { Fleet } from "@formant/data-sdk";
 
 interface IMaintenanceItemProps {
   name: string;
   lastServiceDate: string;
   nextServiceDate: string;
   serviceStatus: string;
+  maintenanceType: string;
 }
 
 export const MaintenanceItem: FC<IMaintenanceItemProps> = ({
@@ -13,7 +15,13 @@ export const MaintenanceItem: FC<IMaintenanceItemProps> = ({
   lastServiceDate,
   nextServiceDate,
   serviceStatus,
+  maintenanceType,
 }) => {
+  const performMaintenance = async () => {
+    const currentDevice = await Fleet.getCurrentDevice();
+    await currentDevice.sendCommand("perform.maintenance", maintenanceType);
+  };
+
   return (
     <div className={styles["item-container"]}>
       <div className={styles.top}>
@@ -24,7 +32,9 @@ export const MaintenanceItem: FC<IMaintenanceItemProps> = ({
       </div>
       <div className={styles.bottom}>
         <span className={styles.item}>{name}</span>
-        <button className={styles.btn}>Mark Complete</button>
+        <button onClick={performMaintenance} className={styles.btn}>
+          Mark Complete
+        </button>
       </div>
     </div>
   );
