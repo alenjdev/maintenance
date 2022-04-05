@@ -1,5 +1,5 @@
-import { FC, useState, useEffect } from "react";
-import { Device } from "@formant/data-sdk";
+import { FC, useState, useLayoutEffect } from "react";
+import { Device, App, ModuleData } from "@formant/data-sdk";
 import { moduleConfig } from "../types/ModuleConfig";
 import { getLastServiceDate } from "../utils/getLastServiceDate";
 import { getNextServiceDate } from "../utils/getNextServiceDate";
@@ -13,7 +13,7 @@ export const Maintenance: FC<IMaintenanceProps> = ({ device }) => {
   const [latestStats, setLatestStats] = useState();
   const [streams, setStreams] = useState<string[]>([]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     getLatestStreams();
   }, [device]);
 
@@ -23,9 +23,7 @@ export const Maintenance: FC<IMaintenanceProps> = ({ device }) => {
       const maintenanceStats = latest.filter(
         (_: any) => _.currentValue === "Maintenance performed"
       );
-
       const maintenanceStreams = maintenanceStats.map((_: any) => _.streamName);
-
       setLatestStats(maintenanceStats);
       setStreams(maintenanceStreams);
     }
@@ -52,7 +50,8 @@ export const Maintenance: FC<IMaintenanceProps> = ({ device }) => {
                   lastServiceDate={getLastServiceDate(lastService) || "--:--"}
                   nextServiceDate={nextService[0] || "--:--"}
                   serviceStatus={nextService[1]}
-                  maintenanceType={(moduleConfig as any)[_].streamName}
+                  maintenanceType={moduleConfig[_].streamName}
+                  getLatestStreams={getLatestStreams}
                 />
               );
             }
@@ -64,7 +63,8 @@ export const Maintenance: FC<IMaintenanceProps> = ({ device }) => {
               lastServiceDate={"Last service: More than 20 days ago"}
               nextServiceDate={"Next Service: Overdue for more than 15 days"}
               serviceStatus={"overdue"}
-              maintenanceType={(moduleConfig as any)[_].streamName}
+              maintenanceType={moduleConfig[_].streamName}
+              getLatestStreams={getLatestStreams}
             />
           );
         })}

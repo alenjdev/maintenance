@@ -1,13 +1,15 @@
 import styles from "./MaintenanceItem.module.scss";
-import { FC } from "react";
+import React, { FC, useState } from "react";
 import { Fleet } from "@formant/data-sdk";
-
+import loading from "../images/loading.png";
+import { Button } from "@alenjdev/ui-sdk";
 interface IMaintenanceItemProps {
   name: string;
   lastServiceDate: string;
   nextServiceDate: string;
   serviceStatus: string;
   maintenanceType: string;
+  getLatestStreams: () => void;
 }
 
 export const MaintenanceItem: FC<IMaintenanceItemProps> = ({
@@ -16,10 +18,20 @@ export const MaintenanceItem: FC<IMaintenanceItemProps> = ({
   nextServiceDate,
   serviceStatus,
   maintenanceType,
+  getLatestStreams,
 }) => {
+  const [disable, setDisable] = useState(false);
   const performMaintenance = async () => {
+    setDisable(true);
     const currentDevice = await Fleet.getCurrentDevice();
     await currentDevice.sendCommand("perform.maintenance", maintenanceType);
+    await timeout(6000);
+    getLatestStreams;
+    setDisable(false);
+  };
+
+  const timeout = (ms: number) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   };
 
   return (
@@ -32,9 +44,15 @@ export const MaintenanceItem: FC<IMaintenanceItemProps> = ({
       </div>
       <div className={styles.bottom}>
         <span className={styles.item}>{name}</span>
-        <button onClick={performMaintenance} className={styles.btn}>
+        <Button
+          disabled={disable}
+          type="primary"
+          size="small"
+          onClick={performMaintenance}
+          className={styles.btn}
+        >
           Mark Complete
-        </button>
+        </Button>
       </div>
     </div>
   );
