@@ -1,7 +1,6 @@
 import styles from "./MaintenanceItem.module.scss";
 import React, { FC, useState } from "react";
 import { Fleet } from "@formant/data-sdk";
-import loading from "../images/loading.png";
 import { Button } from "@alenjdev/ui-sdk";
 interface IMaintenanceItemProps {
   name: string;
@@ -9,7 +8,6 @@ interface IMaintenanceItemProps {
   nextServiceDate: string;
   serviceStatus: string;
   maintenanceType: string;
-  getLatestStreams: () => void;
 }
 
 export const MaintenanceItem: FC<IMaintenanceItemProps> = ({
@@ -18,15 +16,14 @@ export const MaintenanceItem: FC<IMaintenanceItemProps> = ({
   nextServiceDate,
   serviceStatus,
   maintenanceType,
-  getLatestStreams,
 }) => {
   const [disable, setDisable] = useState(false);
+
   const performMaintenance = async () => {
     setDisable(true);
     const currentDevice = await Fleet.getCurrentDevice();
     await currentDevice.sendCommand("perform.maintenance", maintenanceType);
     await timeout(6000);
-    getLatestStreams;
     setDisable(false);
   };
 

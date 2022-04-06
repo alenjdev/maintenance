@@ -51,7 +51,6 @@ export const Maintenance: FC<IMaintenanceProps> = ({ device }) => {
                   nextServiceDate={nextService[0] || "--:--"}
                   serviceStatus={nextService[1]}
                   maintenanceType={moduleConfig[_].streamName}
-                  getLatestStreams={getLatestStreams}
                 />
               );
             }
@@ -64,7 +63,6 @@ export const Maintenance: FC<IMaintenanceProps> = ({ device }) => {
               nextServiceDate={"Next Service: Overdue for more than 15 days"}
               serviceStatus={"overdue"}
               maintenanceType={moduleConfig[_].streamName}
-              getLatestStreams={getLatestStreams}
             />
           );
         })}
