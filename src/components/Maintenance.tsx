@@ -47,6 +47,7 @@ export const Maintenance: FC<IMaintenanceProps> = ({ device }) => {
                 <MaintenanceItem
                   key={idx}
                   name={_}
+                  getLatestStreams={getLatestStreams}
                   lastServiceDate={getLastServiceDate(lastService) || "--:--"}
                   nextServiceDate={nextService[0] || "--:--"}
                   serviceStatus={nextService[1]}
@@ -58,6 +59,7 @@ export const Maintenance: FC<IMaintenanceProps> = ({ device }) => {
           return (
             <MaintenanceItem
               key={idx}
+              getLatestStreams={getLatestStreams}
               name={_}
               lastServiceDate={"Last service: More than 20 days ago"}
               nextServiceDate={"Next Service: Overdue for more than 15 days"}

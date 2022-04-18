@@ -8,6 +8,7 @@ interface IMaintenanceItemProps {
   nextServiceDate: string;
   serviceStatus: string;
   maintenanceType: string;
+  getLatestStreams: () => void;
 }
 
 export const MaintenanceItem: FC<IMaintenanceItemProps> = ({
@@ -16,6 +17,7 @@ export const MaintenanceItem: FC<IMaintenanceItemProps> = ({
   nextServiceDate,
   serviceStatus,
   maintenanceType,
+  getLatestStreams,
 }) => {
   const [disable, setDisable] = useState(false);
 
@@ -23,7 +25,10 @@ export const MaintenanceItem: FC<IMaintenanceItemProps> = ({
     setDisable(true);
     const currentDevice = await Fleet.getCurrentDevice();
     await currentDevice.sendCommand("perform.maintenance", maintenanceType);
-    await timeout(6000);
+    for (let i = 0; i < 4; i++) {
+      await getLatestStreams();
+      await timeout(3000);
+    }
     setDisable(false);
   };
 
